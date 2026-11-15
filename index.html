@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">m
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -226,7 +226,7 @@ const db = getFirestore(app);
 const WHATSAPP = "918850523876";
 const ADMIN_EMAIL = "admin@hanlibzr.com";
 const ADMIN_PASS = "12345678";
-const SITE_URL = "https://nazimempire437-sys.github.io/hanli-bzr/";
+const SITE_URL = "https://nazimempire437-sys.github.io/hanli-bzr2/";
 let currentSeller = null;
 let isAdmin = false;
 let selectedImageData = "";
@@ -409,12 +409,12 @@ try{
 if(p.image && p.image.startsWith("data:") && navigator.canShare){
 let file=dataURLtoFile(p.image, p.name+".jpg");
 if(navigator.canShare({files:[file]})){
-await navigator.share({files:[file], title:"Hanli Bzr - "+p.name, text:text, url:SITE_URL});
+await navigator.share({files:[file], title:"Hanli Bzr - "+p.name, text:text});
 return;
 }
 }
 if(navigator.share){
-await navigator.share({title:"Hanli Bzr - "+p.name, text:text, url:SITE_URL});
+await navigator.share({title:"Hanli Bzr - "+p.name, text:text});
 return;
 }
 }catch(e){}
@@ -423,7 +423,7 @@ window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank");
 window.shareCurrentShop=function(){
 if(!currentShop) return;
 let text=`🛍️ ${currentShop.name} Ka Catalogue - Hanli Bzr\n📍 ${currentShop.city}\nSeller ID: ${currentShop.sellerId}\n\nSaare Products Dekho 👇\n${SITE_URL}`;
-if(navigator.share){ navigator.share({title:currentShop.name, text:text, url:SITE_URL}); }
+if(navigator.share){ navigator.share({title:currentShop.name, text:text}); }
 else{ window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank"); }
 };
 window.openShop=function(sellerUid, sellerName, city, sellerId){
@@ -496,7 +496,7 @@ showPage("home");
 };
 window.shareShop=function(){
 let text=`Hanli Bzr Shop - Latest All India Products 🇮🇳\n\nSaare Products Dekho 👇\n${SITE_URL}`;
-if(navigator.share){ navigator.share({title:"Hanli Bzr Shop",text:text,url:SITE_URL}); }
+if(navigator.share){ navigator.share({title:"Hanli Bzr Shop",text:text}); }
 else{ window.open("https://wa.me/?text="+encodeURIComponent(text)); }
 };
 loadProducts();
