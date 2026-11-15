@@ -202,7 +202,7 @@ button{border:0;cursor:pointer;border-radius:7px;padding:12px;font-weight:bold}
 </div>
 <nav class="bottom-nav">
 <button class="nav-btn active" onclick="showPage('home')"><span>🏠</span>Home</button>
-<button class="nav-btn" onclick="showPage('search')"><span>🔍</span>Search</button>
+<a class="nav-btn" href="https://www.instagram.com/aslam_bhai.100" target="_blank" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;"><span>📸</span>Instagram</a>
 <button class="nav-btn" onclick="showPage('category')"><span>📂</span>Category</button>
 <button class="nav-btn" onclick="showPage('seller')"><span>🏪</span>Seller</button>
 <button class="nav-btn" onclick="showPage('admin')"><span>👨‍💼</span>Admin</button>
@@ -444,16 +444,17 @@ window.orderProduct=async function(id){
 try{
 let p=allProductsCache.find(x=>x.id===id);
 if(!p){ let snap=await getDoc(doc(db,"products",id)); p={id:id, ...snap.data()}; }
-let message=`NEW ORDER - HANLI BZR\n\n🛍️ Product: ${p.name}\n💰 Price: ₹${p.price}\n🏪 Seller: ${p.seller} (${p.sellerId})\n📍 City: ${p.city}\n\nMujhe ye wali Kurti order karni hai. Please confirm.\n\nWebsite: ${SITE_URL}`;
+let message=`NEW ORDER - HANLI BZR\n\n🛍️ Product: ${p.name}\n💰 Price: ₹${p.price}\n🏪 Seller: ${p.seller} (${p.sellerId})\n📍 City: ${p.city}\n\nMujhe ye product order karna hai. Please confirm.\n\nPhoto maine download kar li hai, neeche bhej raha hu 👇\n\nWebsite: ${SITE_URL}`;
+if(p.image){
 try{
-if(p.image && p.image.startsWith("data:") && navigator.canShare){
-let file=dataURLtoFile(p.image, p.name+".jpg");
-if(navigator.canShare({files:[file]})){
-await navigator.share({files:[file], title:"New Order - "+p.name, text:message});
-return;
-}
-}
+let a=document.createElement("a");
+a.href=p.image;
+a.download=p.name+".jpg";
+document.body.appendChild(a);
+a.click();
+a.remove();
 }catch(e){}
+}
 window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(message),"_blank");
 }catch(e){ alert(e.message); }
 };
