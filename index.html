@@ -2,20 +2,503 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hanli BZR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanli Bzr Shop</title>
 <style>
-body{font-family:Arial;text-align:center;padding:40px;background:#f8f8f8}
-h1{font-size:32px}
-a{display:inline-block;margin-top:20px;padding:14px 24px;background:#000;color:#fff;text-decoration:none;border-radius:10px;font-size:18px}
-.card{background:#fff;padding:24px;border-radius:16px;max-width:500px;margin:auto;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial;background:#FFF7ED;padding-bottom:75px}
+header{background:#111;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
+header h2{font-size:21px}
+header p{font-size:11px;color:#ddd}
+.page{display:none;padding:13px}
+.page.active{display:block}
+.banner{background:#222;color:white;padding:15px 15px;text-align:center;border-radius:12px;margin-bottom:15px}
+.title{font-size:19px;margin:18px 0}
+.box{background:white;padding:15px;border-radius:10px;margin:12px 0;box-shadow:0 2px 5px #ddd}
+input,select{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:7px;font-size:15px}
+button{border:0;cursor:pointer;border-radius:7px;padding:12px;font-weight:bold}
+.mainbtn{width:100%;background:#111;color:white;margin-top:10px}
+.orange{background:#EA580C;color:white}
+.green{background:#16833a;color:white}
+.red{background:#fee2e2;color:#991b1b}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.product{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 5px #ddd}
+.product img{width:100%;aspect-ratio:3/4;object-fit:cover;background:#eee;cursor:zoom-in}
+.product-info{padding:9px}
+.product-info h4{font-size:13px;margin-bottom:6px}
+.price{color:green;font-weight:bold;margin:8px 0}
+.sellerLink{font-size:12px;color:#2563eb;text-decoration:underline;cursor:pointer}
+.smallbtn{padding:9px;font-size:12px;width:48%}
+.rowBtn{display:flex;gap:6px;margin-top:8px}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:8px 0;box-shadow:0 -2px 8px #ddd}
+.nav-btn{background:white;color:#555;font-size:10px;padding:5px 2px}
+.nav-btn span{display:block;font-size:20px}
+.nav-btn.active{color:#EA580C}
+.msg{font-size:13px;margin-top:10px;color:#b91c1c}
+.shopHead{background:#111;color:white;padding:20px;border-radius:12px;text-align:center}
+.shopHead h2{font-size:22px}
+.shopHead p{font-size:13px;color:#ddd;margin-top:5px}
+#previewImg{width:100%;max-height:250px;object-fit:cover;border-radius:10px;display:none;margin-top:10px}
+#zoomModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:9999;justify-content:center;align-items:center;flex-direction:column}
+#zoomModal.show{display:flex}
+#zoomModal img{max-width:95%;max-height:80%;object-fit:contain;border-radius:10px}
+#zoomName{color:white;margin-top:15px;font-size:16px;font-weight:bold}
+#zoomPrice{color:#4ade80;margin-top:5px;font-weight:bold}
+.zoomBtns{display:flex;gap:10px;margin-top:15px}
+.zoomClose{position:absolute;top:15px;right:15px;background:white;color:black;width:40px;height:40px;border-radius:50%;font-size:20px}
+.searchBox{display:flex;gap:8px;margin-bottom:12px}
+.searchBox input{flex:1;margin:0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:10px}
+.chip{white-space:nowrap;background:white;border:1px solid #ddd;padding:9px 15px;border-radius:20px;font-size:13px}
+.chip.active{background:#111;color:white}
+.catGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.catCard{background:white;padding:25px 10px;text-align:center;border-radius:12px;box-shadow:0 2px 5px #ddd;cursor:pointer}
+.catCard span{font-size:32px;display:block}
+.catCard b{font-size:15px}
+.catCard p{font-size:12px;color:#888;margin-top:5px}
 </style>
 </head>
 <body>
-<div class="card">
-<h1>Hanli BZR</h1>
-<p>Welcome! Aapki website ab live hai.</p>
-<a href="https://nazimempire437-sys.github.io/hanli-bzr2/">Visit Website</a>
+<header>
+<div><h2>🛍️ HANLI BZR</h2><p>Meerut Ka Apna Bazaar 🇮🇳</p></div>
+<button onclick="shareShop()">↗ Share</button>
+</header>
+<section id="home" class="page active">
+<div class="banner"><h2>WELCOME TO HANLI BZR</h2><p>Direct Seller Se Kharido</p><p>All India Products 🇮🇳</p></div>
+<div class="searchBox"><input id="homeSearch" placeholder="🔍 Kurti, Saree, Pajama... Kya chahiye?" oninput="doSearch(this.value)"><button class="orange" onclick="showPage('search')">Search</button></div>
+<div class="chips" id="homeChips">
+<button class="chip active" onclick="filterCategory('All',this)">All</button>
+<button class="chip" onclick="filterCategory('Kurti',this)">👗 Kurti</button>
+<button class="chip" onclick="filterCategory('Saree',this)">🥻 Saree</button>
+<button class="chip" onclick="filterCategory('Suit',this)">👔 Suit</button>
+<button class="chip" onclick="filterCategory('Jeans',this)">👖 Jeans</button>
+<button class="chip" onclick="filterCategory('Pants',this)">👖 Pants</button>
+<button class="chip" onclick="filterCategory('Lehenga',this)">👗 Lehenga</button>
+<button class="chip" onclick="filterCategory('Other',this)">🛍️ Other</button>
 </div>
+<button class="mainbtn orange" onclick="showPage('seller')">🏪 Seller Login / Registration</button>
+<h3 class="title">🔥 Latest Products</h3>
+<div id="homeProducts" class="products">Loading...</div>
+</section>
+<section id="search" class="page">
+<h2 class="title">🔍 Search Product</h2>
+<div class="searchBox"><input id="searchInput" placeholder="Kurti, Pajama, Saree... likho" oninput="doSearchPage(this.value)"><button class="orange" onclick="doSearchPage(document.getElementById('searchInput').value)">Search</button></div>
+<div class="chips">
+<button class="chip" onclick="quickSearch('Kurti')">Kurti</button>
+<button class="chip" onclick="quickSearch('Pajama')">Pajama</button>
+<button class="chip" onclick="quickSearch('Saree')">Saree</button>
+<button class="chip" onclick="quickSearch('Jeans')">Jeans</button>
+<button class="chip" onclick="quickSearch('Suit')">Suit</button>
+<button class="chip" onclick="quickSearch('Lehenga')">Lehenga</button>
+</div>
+<p style="font-size:13px;color:#888;margin-bottom:10px">Jaise: <b>Kurti</b> likhte hi saari Kurti aa jayegi</p>
+<div id="searchResults" class="products"><p>Upar likh ke Search karo...</p></div>
+</section>
+<section id="category" class="page">
+<h2 class="title">📂 Category - Kya Chahiye?</h2>
+<div class="catGrid">
+<div class="catCard" onclick="openCategory('Kurti')"><span>👗</span><b>Kurti</b><p id="count-Kurti"></p></div>
+<div class="catCard" onclick="openCategory('Saree')"><span>🥻</span><b>Saree</b><p id="count-Saree"></p></div>
+<div class="catCard" onclick="openCategory('Suit')"><span>👔</span><b>Suit</b><p id="count-Suit"></p></div>
+<div class="catCard" onclick="openCategory('Jeans')"><span>👖</span><b>Jeans</b><p id="count-Jeans"></p></div>
+<div class="catCard" onclick="openCategory('Pants')"><span>👖</span><b>Pants / Pajama</b><p id="count-Pants"></p></div>
+<div class="catCard" onclick="openCategory('Lehenga')"><span>👗</span><b>Lehenga</b><p id="count-Lehenga"></p></div>
+<div class="catCard" onclick="openCategory('Other')"><span>🛍️</span><b>Other</b><p id="count-Other"></p></div>
+<div class="catCard" onclick="openCategory('All')"><span>🇮🇳</span><b>All India Products</b><p id="count-All"></p></div>
+</div>
+<h3 class="title" id="catTitle" style="display:none"></h3>
+<div id="catResults" class="products"></div>
+</section>
+<section id="seller" class="page">
+<h2 class="title">🏪 Seller Panel</h2>
+<div class="box" id="signupBox">
+<h3>New Seller Registration</h3>
+<input id="sName" placeholder="Dukaan Ka Naam">
+<input id="sMobile" type="tel" maxlength="10" placeholder="10 Digit Mobile Number">
+<input id="sCity" placeholder="City">
+<input id="sPin" type="password" maxlength="20" placeholder="6 Digit Ya Usse Bada PIN">
+<button class="mainbtn orange" onclick="registerSeller()">Create Seller Account</button>
+<p id="signupMsg" class="msg"></p>
+</div>
+<div class="box" id="loginBox">
+<h3>Seller Login</h3>
+<input id="lMobile" type="tel" maxlength="10" placeholder="Mobile Number">
+<input id="lSellerId" placeholder="Seller ID">
+<input id="lPin" type="password" placeholder="Password / PIN">
+<button class="mainbtn" onclick="loginSeller()">Login</button>
+<p id="loginMsg" class="msg"></p>
+</div>
+<div class="box" id="dashboard" style="display:none">
+<h3>Welcome <span id="dashName"></span> 🎉</h3>
+<p>Seller ID: <b id="dashId"></b></p>
+<p>Mobile: <b id="dashMobile"></b></p>
+<p>City: <b id="dashCity"></b></p>
+<p>Status: <b id="dashStatus"></b></p>
+<button class="mainbtn orange" onclick="openMyShop()">👀 Meri Dukaan Dekho</button>
+<hr style="margin:15px 0">
+<h3>➕ Add New Product</h3>
+<input id="pName" placeholder="Product Name">
+<input id="pPrice" type="number" placeholder="Product Price">
+<select id="pCategory">
+<option value="Kurti">Kurti</option>
+<option value="Saree">Saree</option>
+<option value="Suit">Suit</option>
+<option value="Jeans">Jeans</option>
+<option value="Pants">Pants</option>
+<option value="Lehenga">Lehenga</option>
+<option value="Other">Other</option>
+</select>
+<p style="font-size:13px;margin-top:10px"><b>Product Photo - Gallery Se Chuno 👇</b></p>
+<input id="pImageFile" type="file" accept="image/*" onchange="previewPhoto(this)">
+<img id="previewImg">
+<button class="mainbtn green" onclick="addProduct()">Upload Product</button>
+<p id="productMsg" class="msg"></p>
+<h3 class="title">My Products</h3>
+<div id="myProducts"></div>
+<button class="mainbtn red" onclick="logout()">Logout</button>
+</div>
+</section>
+<section id="shop" class="page">
+<button onclick="showPage('home')" style="background:#eee;padding:10px 15px">← Back To Home</button>
+<div class="shopHead" style="margin-top:12px">
+<h2 id="shopName">Shop</h2>
+<p id="shopCity"></p>
+<p id="shopId"></p>
+<p id="shopCount"></p>
+<button class="mainbtn orange" onclick="shareCurrentShop()" style="margin-top:12px">↗ Is Dukaan Ka Catalogue Share Karo</button>
+</div>
+<h3 class="title">🛍️ Is Seller Ke Saare Products</h3>
+<div id="shopProducts" class="products"></div>
+</section>
+<section id="admin" class="page">
+<h2 class="title">👨‍💼 Admin Panel</h2>
+<div class="box" id="adminLoginBox">
+<p>Admin Login</p>
+<input id="adminEmail" type="email" placeholder="Admin Email">
+<input id="adminPassword" type="password" placeholder="Admin Password">
+<button class="mainbtn" onclick="adminLogin()">Admin Login</button>
+<p id="adminMsg" class="msg"></p>
+</div>
+<div id="adminDashboard" style="display:none">
+<div class="box"><h3>Seller Approval</h3><div id="adminSellers"></div></div>
+<div class="box"><h3>Product Approval</h3><div id="adminProducts"></div></div>
+<button class="mainbtn red" onclick="logout()">Admin Logout</button>
+</div>
+</section>
+<section id="orders" class="page">
+<h2 class="title">📦 Orders</h2>
+<div id="orderList" class="box">WhatsApp se order bheje jayenge.</div>
+</section>
+<div id="zoomModal">
+<button class="zoomClose" onclick="closeZoom()">✕</button>
+<img id="zoomImg" src="">
+<div id="zoomName"></div>
+<div id="zoomPrice"></div>
+<div class="zoomBtns">
+<button class="green" style="padding:12px 20px" onclick="orderFromZoom()">🛒 Order Now</button>
+<button class="orange" style="padding:12px 20px" onclick="shareFromZoom()">↗ Share Photo</button>
+</div>
+<p style="color:#aaa;font-size:12px;margin-top:12px">Photo pe click karke band karo</p>
+</div>
+<nav class="bottom-nav">
+<button class="nav-btn active" onclick="showPage('home')"><span>🏠</span>Home</button>
+<button class="nav-btn" onclick="showPage('search')"><span>🔍</span>Search</button>
+<button class="nav-btn" onclick="showPage('category')"><span>📂</span>Category</button>
+<button class="nav-btn" onclick="showPage('seller')"><span>🏪</span>Seller</button>
+<button class="nav-btn" onclick="showPage('admin')"><span>👨‍💼</span>Admin</button>
+<button class="nav-btn" onclick="showPage('orders')"><span>📦</span>Orders</button>
+</nav>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInAnonymously,signOut} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+import {getFirestore,collection,doc,setDoc,getDoc,getDocs,query,where,updateDoc,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+const firebaseConfig = {
+apiKey: "AIzaSyCmYTa25MrWmPVkWf4IgVJ7C7gvjjjZ5xQ",
+authDomain: "hanli-bazaar-371f5.firebaseapp.com",
+projectId: "hanli-bazaar-371f5",
+storageBucket: "hanli-bazaar-371f5.firebasestorage.app",
+messagingSenderId: "214125118916",
+appId: "1:214125118916:web:aafd9a50e58db92154d091"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const WHATSAPP = "918850523876";
+const ADMIN_EMAIL = "admin@hanlibzr.com";
+const ADMIN_PASS = "12345678";
+const SITE_URL = "https://nazimempire437-sys.github.io/hanli-bzr/";
+let currentSeller = null;
+let isAdmin = false;
+let selectedImageData = "";
+let allProductsCache = [];
+let currentZoomProduct = null;
+let currentShop = null;
+let currentFilter = "All";
+window.showPage = function(page){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(page).classList.add("active");
+document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+window.scrollTo(0,0);
+};
+function sellerEmail(mobile){ return mobile + "@seller.hanlibzr.com"; }
+function generateSellerId(){ return "HB" + Math.floor(100000 + Math.random()*900000); }
+function escapeHTML(v){ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+window.registerSeller = async function(){
+try{
+let name=document.getElementById("sName").value.trim();
+let mobile=document.getElementById("sMobile").value.trim();
+let city=document.getElementById("sCity").value.trim();
+let pin=document.getElementById("sPin").value;
+if(!name || !city || !/^[0-9]{10}$/.test(mobile) || pin.length<6){ alert("Sabhi details sahi bharo. PIN kam se kam 6 digit hona chahiye."); return; }
+let sellerId=generateSellerId();
+let result=await createUserWithEmailAndPassword(auth,sellerEmail(mobile),pin);
+await setDoc(doc(db,"sellers",result.user.uid),{uid:result.user.uid,name:name,mobile:mobile,city:city,sellerId:sellerId,email:sellerEmail(mobile),approved:false,createdAt:serverTimestamp()});
+document.getElementById("signupMsg").innerHTML="Account ban gaya! Aapki Seller ID: <b>"+sellerId+"</b><br>Is ID ko sambhal kar rakhein.";
+document.getElementById("sName").value="";document.getElementById("sMobile").value="";document.getElementById("sCity").value="";document.getElementById("sPin").value="";
+await signOut(auth);
+}catch(e){ document.getElementById("signupMsg").innerText=e.message; }
+};
+window.loginSeller = async function(){
+try{
+let mobile=document.getElementById("lMobile").value.trim();
+let sellerId=document.getElementById("lSellerId").value.trim();
+let pin=document.getElementById("lPin").value;
+if(!/^[0-9]{10}$/.test(mobile)||!sellerId||!pin){ alert("Mobile, Seller ID aur PIN bharo"); return; }
+let result=await signInWithEmailAndPassword(auth,sellerEmail(mobile),pin);
+let snap=await getDoc(doc(db,"sellers",result.user.uid));
+if(!snap.exists()){ await signOut(auth); throw new Error("Seller Account nahi mila"); }
+let s=snap.data();
+if(s.sellerId!==sellerId){ await signOut(auth); throw new Error("Seller ID galat hai. Sahi ID: "+s.sellerId); }
+if(!s.approved){ await signOut(auth); throw new Error("Aapka account Admin Approval ke intezar mein hai."); }
+currentSeller=s;
+document.getElementById("signupBox").style.display="none";
+document.getElementById("loginBox").style.display="none";
+document.getElementById("dashboard").style.display="block";
+document.getElementById("dashName").innerText=s.name;
+document.getElementById("dashId").innerText=s.sellerId;
+document.getElementById("dashMobile").innerText=s.mobile;
+document.getElementById("dashCity").innerText=s.city;
+document.getElementById("dashStatus").innerText="Approved ✅";
+loadMyProducts();
+}catch(e){ document.getElementById("loginMsg").innerText=e.message; }
+};
+window.previewPhoto = function(input){
+let file=input.files[0];
+if(!file) return;
+let reader=new FileReader();
+reader.onload=function(e){
+let img=new Image();
+img.onload=function(){
+let canvas=document.createElement("canvas");
+let max=800; let w=img.width, h=img.height;
+if(w>h){ if(w>max){ h=h*max/w; w=max; } } else { if(h>max){ w=w*max/h; h=max; } }
+canvas.width=w; canvas.height=h;
+canvas.getContext("2d").drawImage(img,0,0,w,h);
+selectedImageData=canvas.toDataURL("image/jpeg",0.75);
+let pv=document.getElementById("previewImg");
+pv.src=selectedImageData; pv.style.display="block";
+};
+img.src=e.target.result;
+};
+reader.readAsDataURL(file);
+};
+window.addProduct = async function(){
+try{
+if(!currentSeller) return;
+let name=document.getElementById("pName").value.trim();
+let price=Number(document.getElementById("pPrice").value);
+let category=document.getElementById("pCategory").value;
+if(!name||price<=0){ alert("Product Name aur Price bharo"); return; }
+if(!selectedImageData){ alert("Pehle Gallery se Photo chuno"); return; }
+await addDoc(collection(db,"products"),{name:name,price:price,category:category,image:selectedImageData,seller:currentSeller.name,sellerUid:auth.currentUser.uid,sellerId:currentSeller.sellerId,city:currentSeller.city,approved:false,createdAt:serverTimestamp()});
+document.getElementById("productMsg").innerText="Product Admin Approval ke liye bhej diya gaya hai!";
+document.getElementById("pName").value="";document.getElementById("pPrice").value="";document.getElementById("pImageFile").value="";selectedImageData="";document.getElementById("previewImg").style.display="none";
+loadMyProducts();
+}catch(e){ document.getElementById("productMsg").innerText=e.message; }
+};
+async function loadMyProducts(){
+let q=query(collection(db,"products"),where("sellerUid","==",auth.currentUser.uid));
+let snap=await getDocs(q);
+let html="";
+snap.forEach(d=>{ let p=d.data(); html+=`<div class="box"><img src="${p.image}" style="width:100%;height:150px;object-fit:cover;border-radius:8px" onclick="openZoomById('${d.id}')"><h4>${escapeHTML(p.name)}</h4><p>₹${p.price}</p><p>Status: ${p.approved?"Approved ✅":"Pending"}</p><div class="rowBtn"><button class="green smallbtn" onclick="shareProduct('${d.id}')">↗ Share</button><button class="smallbtn" style="background:#eee" onclick="openZoomById('${d.id}')">🔍 Zoom</button></div></div>`; });
+document.getElementById("myProducts").innerHTML=html||"Abhi koi Product nahi hai.";
+}
+window.loadProducts=async function(){
+try{
+let q=query(collection(db,"products"),where("approved","==",true));
+let snap=await getDocs(q);
+allProductsCache=[];
+snap.forEach(d=>{ allProductsCache.push({id:d.id, ...d.data()}); });
+renderHome(allProductsCache);
+updateCategoryCounts();
+}catch(e){ document.getElementById("homeProducts").innerText=e.message; }
+};
+function productCard(p){
+return `<div class="product"><img src="${p.image}" onclick="openZoomById('${p.id}')" onerror="this.src='https://placehold.co/400x500?text=Hanli+Bzr'"><div class="product-info"><h4>${escapeHTML(p.name)}</h4><p class="sellerLink" onclick="openShop('${p.sellerUid}','${escapeHTML(p.seller)}','${escapeHTML(p.city||"")}','${escapeHTML(p.sellerId||"")}')">🏪 ${escapeHTML(p.seller||"")}</p><p style="font-size:11px;color:#888">ID: ${escapeHTML(p.sellerId||"")}</p><div class="price">₹${p.price}</div><div class="rowBtn"><button class="mainbtn smallbtn" style="margin:0" onclick="orderProduct('${p.id}')">Order</button><button class="smallbtn orange" onclick="shareProduct('${p.id}')">↗ Share</button></div></div></div>`;
+}
+function renderHome(list){
+let html=list.map(p=>productCard(p)).join("");
+document.getElementById("homeProducts").innerHTML=html||"<p>Abhi Products Available Nahi Hain.</p>";
+}
+function matchesSearch(p, text){
+if(!text) return true;
+let t=text.toLowerCase();
+return (p.name||"").toLowerCase().includes(t) || (p.category||"").toLowerCase().includes(t) || (p.seller||"").toLowerCase().includes(t) || (p.city||"").toLowerCase().includes(t);
+}
+window.doSearch=function(text){
+let filtered=allProductsCache.filter(p=>matchesSearch(p,text));
+if(currentFilter!=="All") filtered=filtered.filter(p=>p.category===currentFilter);
+renderHome(filtered);
+};
+window.doSearchPage=function(text){
+let filtered=allProductsCache.filter(p=>matchesSearch(p,text));
+document.getElementById("searchResults").innerHTML=filtered.map(p=>productCard(p)).join("")||"<p>Koi product nahi mila. Dusra naam likh ke dekho.</p>";
+};
+window.quickSearch=function(text){
+document.getElementById("searchInput").value=text;
+doSearchPage(text);
+};
+window.filterCategory=function(cat, btn){
+currentFilter=cat;
+document.querySelectorAll("#homeChips .chip").forEach(c=>c.classList.remove("active"));
+if(btn) btn.classList.add("active");
+let text=document.getElementById("homeSearch").value;
+let filtered=allProductsCache.filter(p=>matchesSearch(p,text));
+if(cat!=="All") filtered=filtered.filter(p=>p.category===cat);
+renderHome(filtered);
+};
+window.openCategory=function(cat){
+showPage('category');
+document.getElementById("catTitle").style.display="block";
+document.getElementById("catTitle").innerText=cat==="All"?"🇮🇳 All India Products":"📂 "+cat+" - "+allProductsCache.filter(p=>cat==="All"||p.category===cat).length+" Products";
+let list=cat==="All"?allProductsCache:allProductsCache.filter(p=>p.category===cat);
+document.getElementById("catResults").innerHTML=list.map(p=>productCard(p)).join("")||"<p>Is category me abhi koi product nahi hai.</p>";
+document.getElementById("catResults").scrollIntoView();
+};
+function updateCategoryCounts(){
+["Kurti","Saree","Suit","Jeans","Pants","Lehenga","Other"].forEach(c=>{
+let el=document.getElementById("count-"+c);
+if(el) el.innerText=allProductsCache.filter(p=>p.category===c).length+" Products";
+});
+let all=document.getElementById("count-All");
+if(all) all.innerText=allProductsCache.length+" Products";
+}
+window.openZoomById=function(id){
+let p=allProductsCache.find(x=>x.id===id);
+if(!p) return;
+currentZoomProduct=p;
+document.getElementById("zoomImg").src=p.image;
+document.getElementById("zoomName").innerText=p.name+" - "+p.seller;
+document.getElementById("zoomPrice").innerText="₹"+p.price;
+document.getElementById("zoomModal").classList.add("show");
+};
+window.closeZoom=function(){ document.getElementById("zoomModal").classList.remove("show"); };
+document.getElementById("zoomModal").addEventListener("click",function(e){ if(e.target.id==="zoomModal" || e.target.id==="zoomImg") closeZoom(); });
+window.orderFromZoom=function(){ if(currentZoomProduct){ closeZoom(); orderProduct(currentZoomProduct.id); } };
+window.shareFromZoom=function(){ if(currentZoomProduct){ shareProduct(currentZoomProduct.id); } };
+function dataURLtoFile(dataurl, filename){
+let arr=dataurl.split(','), mime=arr[0].match(/:(.*?);/)[1], bstr=atob(arr[1]), n=bstr.length, u8arr=new Uint8Array(n);
+while(n--){ u8arr[n]=bstr.charCodeAt(n); }
+return new File([u8arr], filename, {type:mime});
+}
+window.shareProduct=async function(id){
+let p=allProductsCache.find(x=>x.id===id);
+if(!p){ let snap=await getDoc(doc(db,"products",id)); p={id:id, ...snap.data()}; }
+let text=`🛍️ ${p.name}\n💰 Price: ₹${p.price}\n🏪 Seller: ${p.seller} (${p.sellerId})\n📍 ${p.city}\n\nHanli Bzr se Order karo 👇\n${SITE_URL}`;
+try{
+if(p.image && p.image.startsWith("data:") && navigator.canShare){
+let file=dataURLtoFile(p.image, p.name+".jpg");
+if(navigator.canShare({files:[file]})){
+await navigator.share({files:[file], title:"Hanli Bzr - "+p.name, text:text, url:SITE_URL});
+return;
+}
+}
+if(navigator.share){
+await navigator.share({title:"Hanli Bzr - "+p.name, text:text, url:SITE_URL});
+return;
+}
+}catch(e){}
+window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank");
+};
+window.shareCurrentShop=function(){
+if(!currentShop) return;
+let text=`🛍️ ${currentShop.name} Ka Catalogue - Hanli Bzr\n📍 ${currentShop.city}\nSeller ID: ${currentShop.sellerId}\n\nSaare Products Dekho 👇\n${SITE_URL}`;
+if(navigator.share){ navigator.share({title:currentShop.name, text:text, url:SITE_URL}); }
+else{ window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank"); }
+};
+window.openShop=function(sellerUid, sellerName, city, sellerId){
+currentShop={uid:sellerUid, name:sellerName, city:city, sellerId:sellerId};
+showPage('shop');
+document.getElementById("shopName").innerText="🏪 "+sellerName;
+document.getElementById("shopCity").innerText="📍 "+city;
+document.getElementById("shopId").innerText="Seller ID: "+sellerId;
+let list=allProductsCache.filter(p=>p.sellerUid===sellerUid);
+document.getElementById("shopCount").innerText=list.length+" Products Available";
+document.getElementById("shopProducts").innerHTML=list.map(p=>productCard(p)).join("")||"<p>Abhi koi product nahi hai.</p>";
+};
+window.openMyShop=function(){
+if(!currentSeller) return;
+openShop(currentSeller.uid, currentSeller.name, currentSeller.city, currentSeller.sellerId);
+};
+window.orderProduct=async function(id){
+try{
+let p=allProductsCache.find(x=>x.id===id);
+if(!p){ let snap=await getDoc(doc(db,"products",id)); p={id:id, ...snap.data()}; }
+let message=`NEW ORDER - HANLI BZR\n\n🛍️ Product: ${p.name}\n💰 Price: ₹${p.price}\n🏪 Seller: ${p.seller} (${p.sellerId})\n📍 City: ${p.city}\n\nMujhe ye wali Kurti order karni hai. Please confirm.\n\nWebsite: ${SITE_URL}`;
+try{
+if(p.image && p.image.startsWith("data:") && navigator.canShare){
+let file=dataURLtoFile(p.image, p.name+".jpg");
+if(navigator.canShare({files:[file]})){
+await navigator.share({files:[file], title:"New Order - "+p.name, text:message});
+return;
+}
+}
+}catch(e){}
+window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(message),"_blank");
+}catch(e){ alert(e.message); }
+};
+window.adminLogin=async function(){
+try{
+let email=document.getElementById("adminEmail").value.trim().toLowerCase();
+let password=document.getElementById("adminPassword").value;
+if(email!==ADMIN_EMAIL || password!==ADMIN_PASS){ throw new Error("Admin Email ya Password galat hai"); }
+try{ await signInAnonymously(auth); }catch(e){}
+isAdmin=true;
+document.getElementById("adminLoginBox").style.display="none";
+document.getElementById("adminDashboard").style.display="block";
+loadAdminData();
+}catch(e){ document.getElementById("adminMsg").innerText=e.message; }
+};
+async function loadAdminData(){
+try{
+let sellers=await getDocs(collection(db,"sellers"));
+let sh="";
+sellers.forEach(d=>{ let s=d.data(); sh+=`<div class="box"><b>${escapeHTML(s.name)}</b><p>${escapeHTML(s.mobile)}</p><p>Seller ID: ${escapeHTML(s.sellerId)}</p><p>Status: ${s.approved?"Approved":"Pending"}</p>${!s.approved?`<button class="green" onclick="approveSeller('${d.id}')">Approve Seller</button>`:""}</div>`; });
+document.getElementById("adminSellers").innerHTML=sh||"No Sellers";
+let products=await getDocs(collection(db,"products"));
+let ph="";
+products.forEach(d=>{ let p=d.data(); ph+=`<div class="box"><img src="${p.image}" style="width:100%;height:120px;object-fit:cover;border-radius:8px" onclick="openZoomById('${d.id}')"><b>${escapeHTML(p.name)}</b><p>₹${p.price}</p><p>Seller: ${escapeHTML(p.seller)}</p><p>Status: ${p.approved?"Approved":"Pending"}</p>${!p.approved?`<button class="green" onclick="approveProduct('${d.id}')">Approve Product</button>`:""}</div>`; });
+document.getElementById("adminProducts").innerHTML=ph||"No Products";
+}catch(e){ document.getElementById("adminSellers").innerText="Error: "+e.message; }
+}
+window.approveSeller=async function(id){ if(!isAdmin)return; await updateDoc(doc(db,"sellers",id),{approved:true}); loadAdminData(); };
+window.approveProduct=async function(id){ if(!isAdmin)return; await updateDoc(doc(db,"products",id),{approved:true}); loadAdminData(); loadProducts(); };
+window.logout=async function(){
+await signOut(auth);
+currentSeller=null;isAdmin=false;selectedImageData="";
+document.getElementById("signupBox").style.display="block";
+document.getElementById("loginBox").style.display="block";
+document.getElementById("dashboard").style.display="none";
+document.getElementById("adminLoginBox").style.display="block";
+document.getElementById("adminDashboard").style.display="none";
+showPage("home");
+};
+window.shareShop=function(){
+let text=`Hanli Bzr Shop - Latest All India Products 🇮🇳\n\nSaare Products Dekho 👇\n${SITE_URL}`;
+if(navigator.share){ navigator.share({title:"Hanli Bzr Shop",text:text,url:SITE_URL}); }
+else{ window.open("https://wa.me/?text="+encodeURIComponent(text)); }
+};
+loadProducts();
+</script>
 </body>
 </html>
